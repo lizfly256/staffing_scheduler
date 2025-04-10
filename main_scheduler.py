@@ -1,6 +1,6 @@
 class Staff:
     '''This creates staff and their scheduling related info'''
-    _registry = []
+    _registry = [] # Creates a list of the staff to allow iterating through them
     def __init__(self, name, pref, avail, hoursMin, hoursMax):
         self._registry.append(self)
         self.name = name
@@ -26,17 +26,24 @@ billie = Staff('Billie', [],['mon'], 0, 10)
 
 #who prefers a day and needs more hour
 schedule = dict()
-new_shift = input("day: ")
-prefers_shift = list()
-for s in Staff._registry:
-    if new_shift in s.pref:
-        prefers_shift.append(s.name)
+new_shift = None
+hours_scheduled = dict()
+while new_shift != 'done':
+    new_shift = input("day: ")
+    if new_shift == 'done': break
+    prefers_shift = list()
+    for s in Staff._registry:
+        if new_shift in s.pref:
+            prefers_shift.append(s.name)
+        
+    print(prefers_shift)
+    assigned_staffer = input("Select staffer for " + str(new_shift)).lower()
+    schedule[new_shift] = assigned_staffer  #dictionary[key] = value
+    #dict[key] = dict.get(key, default_value) + value_addition 
+    hours_scheduled[assigned_staffer] = hours_scheduled.get(assigned_staffer, 0) + 8
     
-print(prefers_shift)
-assigned_staffer = input("Select staffer for " + str(new_shift)).lower()
-schedule[new_shift] = assigned_staffer  #dictionary[key] = value
 
-
+print(hours_scheduled)
 print(schedule)
 
 
