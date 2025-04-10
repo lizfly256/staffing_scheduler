@@ -24,19 +24,29 @@ kima = Staff('Kima', ['tues'], ['sun', 'mon', 'tues', 'wed', 'thurs', 'fri', 'sa
 billie = Staff('Billie', [],['mon'], 0, 10)
 
 
-#who prefers a day and needs more hour
+def who_prefers(new_shift, hours_scheduled):
+    '''Retuns a dict with prefers to work this day and how many hours they are already scheduled'''
+    prefers_shift = dict()
+    for s in Staff._registry:
+        if new_shift in s.pref:
+            if s.name.lower() in hours_scheduled:
+                current_hours = hours_scheduled[s.name.lower()]
+            else : current_hours = 0
+            prefers_shift[s.name] = prefers_shift.get(s.name, 0) + current_hours
+    return prefers_shift
+    
+
 schedule = dict()
 new_shift = None
 hours_scheduled = dict()
 while new_shift != 'done':
     new_shift = input("day: ")
     if new_shift == 'done': break
-    prefers_shift = list()
-    for s in Staff._registry:
-        if new_shift in s.pref:
-            prefers_shift.append(s.name)
-        
-    print(prefers_shift)
+    best_options = who_prefers(new_shift, hours_scheduled)
+    
+    
+    print('\n best')
+    print(best_options)
     assigned_staffer = input("Select staffer for " + str(new_shift)).lower()
     schedule[new_shift] = assigned_staffer  #dictionary[key] = value
     #dict[key] = dict.get(key, default_value) + value_addition 
